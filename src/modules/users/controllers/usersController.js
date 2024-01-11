@@ -10,8 +10,16 @@ import checkSulfix from "../../../utils/checkEmailSulfix.js";
 import { handleError } from "../../../utils/error/errorHandler.js";
 import jwt from "jsonwebtoken";
 import {configDotenv} from "dotenv"
+import sendEmail from "../../../utils/mailer/mailer.js";
+import generateCode from "../../../utils/generateCode.js";
 configDotenv()
 
+
+/**
+ * constantes aqui
+ */
+
+const emaiVerificationCode = new Map()
 
 export const list = async (req, res)=>{
     try {
@@ -58,14 +66,37 @@ export const logInUser = async(req, res) =>{
             return res.status(404).send("Usuario não encontrado")
         }
 
-        if(pass === user.pass){
 
+        const verificatioCode = generateCode(12)
+        emaiVerificationCode.set(email, verificatioCode)
+        if(pass === user.pass){
             const token = jwt.sign( {email} , process.env.TOKEN_SECRETE, { expiresIn: '1h' });
+            const info = sendEmail(email, verificatioCode)
             res.json({access_token: token})
         }
 
 
     }catch (error){
        handleError(error, res)
+    }
+}
+
+export const verifyCode = async(req, res)=>{
+    const {email, code} = req.body
+    try {
+        if(!email || !code){
+            return res.status(402).send("email and code must be provided")
+        }
+
+        const storedCode = emaiVerificationCode.get(email)
+
+        if(!storedCode || storedCode !== code){
+            return res.status(401).json({ error: "Código de verificação inválido." });
+        }
+        
+        res.json({ message: "Autenticação bem-sucedida. indo para o conteudo" });
+
+    } catch (error) {
+        handleError(error, res)
     }
 }
