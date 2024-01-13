@@ -8,6 +8,16 @@ export default function verifyToken(req, res, next){
     if(!token){
         return res.status(403).send("Login must be provided")
     }
+    if (err) {
+        // Se houver um erro na verificação do token, trata o erro e envia uma resposta apropriada
+        if (err.name === 'JsonWebTokenError') {
+          return res.status(401).send("Invalid token");
+        } else if (err.name === 'TokenExpiredError') {
+          return res.status(401).send("Token expired");
+        } else {
+          return res.status(500).send("Internal Server Error");
+        }
+      }
 
     jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_SECRETE, (err, decote)=>{
         req.email = decote.email;
