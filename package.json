@@ -4,7 +4,8 @@
   "description": "no description",
   "main": "src/app.js",
   "scripts": {
-    "dev": "node ."
+    "dev": "node .",
+    "build": "node build ."
   },
   "type": "module",
   "dependencies": {
@@ -16,6 +17,7 @@
     "nodemailer": "^6.9.8",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-oauth2-jwt-bearer": "^0.2.0"
+    "passport-oauth2-jwt-bearer": "^0.1.1",
+    "vercel": "^32.3.0"
   }
 }
