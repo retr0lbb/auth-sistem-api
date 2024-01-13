@@ -8,7 +8,10 @@ const app = express();
 const connection = DatabaseConnect()
 
 const port = 3000;
-app.use(cors())
+app.use(cors({
+    origin: "*",
+    methods: "*"
+}))
 app.use(express.json());
 app.use("/users", UserRouter);
 app.use("/auth", route);
