@@ -11,7 +11,6 @@ export default function verifyToken(req, res, next){
 
     jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_SECRETE, (err, decote)=>{
         req.email = decote.email;
-
         next();
     })
 

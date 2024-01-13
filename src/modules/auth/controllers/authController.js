@@ -5,3 +5,7 @@
 export const list = async (req, res)=>{
     res.send("auth")
 }
+
+export const auth = async(req, res)=>{
+
+}

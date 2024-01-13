@@ -2,7 +2,7 @@ import contentRouter from './modules/content/routes/contentRouter.js';
 import UserRouter from './modules/users/routes/usersRouter.js';
 import route from "./modules/auth/routes/authRouter.js"
 import DatabaseConnect from './database/connection.js';
-import express, { Router } from "express";
+import express from "express";
 const app = express();
 const connection = DatabaseConnect()
 
