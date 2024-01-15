@@ -9,8 +9,8 @@ export class authCore{
     async LoginAndGenerateCode(req, res){
         try {
             const {email, pass} = req.body
-            
             if(!email || !pass) return(res.send("no info provided"))
+
 
             const user = await userSchema.findOne({email: email})
             if(!user){
@@ -35,11 +35,10 @@ export class authCore{
             if(!this.code || !code){
                 return("No coded provided")
             }
-
             if(this.code !== code){
                 this.tryAtenpts -= 1
                 if(this.tryAtenpts<= 0){
-                    res.status(400).send("Maximo de tentativas atingidas reiniciando o codigo")
+                    res.status(410).send("Maximo de tentativas atingidas reiniciando o codigo")
                     this.code = ""; 
                     this.tryAtenpts = 5;
                     return;
