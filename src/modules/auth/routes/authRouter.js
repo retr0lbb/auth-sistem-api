@@ -1,10 +1,10 @@
 import express from "express"
-import {list} from "../controllers/authController.js"
+import {logIn, verifyCodeFromEmail} from "../controllers/authController.js"
 
 const router = express.Router()
 
 
-router.get("/auth", list)
+router.post("/", logIn)
 
 
 export default router
