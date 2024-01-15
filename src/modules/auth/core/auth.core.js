@@ -4,6 +4,7 @@ import userSchema from "../../users/models/Usermodel.js";
 
 export class authCore{
     code;
+    tryAtenpts = 5;
 
     async LoginAndGenerateCode(req, res){
         try {
@@ -18,7 +19,7 @@ export class authCore{
             if(user.pass !== pass){
                 return res.send("senha incorreta")
             }
-            
+
             this.code = generateCode(6)
             return res.send(`UserLoged passing to code ${ this.code}`)
 
@@ -30,9 +31,23 @@ export class authCore{
     }
     async verifyCodeFromEmail(req, res){
         try {
-            if(!this.code){
+            const {code} = req.body;
+            if(!this.code || !code){
                 return("No coded provided")
             }
+
+            if(this.code !== code){
+                this.tryAtenpts -= 1
+                if(this.tryAtenpts<= 0){
+                    res.status(400).send("Maximo de tentativas atingidas reiniciando o codigo")
+                    this.code = ""; 
+                    this.tryAtenpts = 5;
+                    return;
+                }
+                res.status(401).send(`Codes did not match code1 ${this.code} code2 ${code} remaining: ${this.tryAtenpts} atenpts`)
+                return;
+            }
+            res.send("code match go to hell 😼")
         } catch (error) {
             handleError(error, res)
         }

@@ -5,6 +5,7 @@ const router = express.Router()
 
 
 router.post("/", logIn)
+router.post("/2fa", verifyCodeFromEmail)
 
 
 export default router
