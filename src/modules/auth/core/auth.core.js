@@ -2,6 +2,9 @@ import { handleError } from "../../../utils/error/errorHandler.js";
 import generateCode from "../../../utils/generateCode.js";
 import userSchema from "../../users/models/Usermodel.js";
 import sendEmail from "../../../utils/mailer/mailer.js"
+import jwt from "jsonwebtoken";
+import {configDotenv} from "dotenv"
+configDotenv()
 
 export class authCore{
     email
@@ -53,7 +56,8 @@ export class authCore{
                 res.status(401).send(`Codes did not match code1 ${this.code} code2 ${code} remaining: ${this.tryAtenpts} atenpts`)
                 return;
             }
-            res.send("code match go to hell 😼")
+            const token = jwt.sign( this.email , process.env.TOKEN_SECRETE, { expiresIn: '5h' });
+            res.json({access_token: token})
         } catch (error) {
             handleError(error, res)
         }
