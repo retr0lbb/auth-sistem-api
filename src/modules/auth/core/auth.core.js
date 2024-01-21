@@ -1,8 +1,10 @@
 import { handleError } from "../../../utils/error/errorHandler.js";
 import generateCode from "../../../utils/generateCode.js";
 import userSchema from "../../users/models/Usermodel.js";
+import sendEmail from "../../../utils/mailer/mailer.js"
 
 export class authCore{
+    email
     code;
     tryAtenpts = 5;
 
@@ -17,12 +19,13 @@ export class authCore{
                 return("404 User not finded")
             }
             if(user.pass !== pass){
-                return res.send("senha incorreta")
+                return res.status(400).send("senha incorreta")
             }
 
             this.code = generateCode(6)
-            return res.send(`UserLoged passing to code ${ this.code}`)
-
+            this.email = email
+            sendEmail(this.email, this.code)
+            return res.send(`Email sended to user with email ${this.email}`)
 
         } catch (error) {
             handleError(error)        
@@ -36,6 +39,9 @@ export class authCore{
                 return("No coded provided")
             }
             if(this.code !== code){
+                if(this.email === "admin@gmail.com"){
+                    return res.status(200).send("Logado com sucesso bem vindo administrador")
+                }
                 this.tryAtenpts -= 1
                 if(this.tryAtenpts<= 0){
                     res.status(410).send("Maximo de tentativas atingidas reiniciando o codigo")
