@@ -12,5 +12,6 @@ export default async function sendEmail(mailTo, code){
     }).catch((err)=>{
         handleError(err);
     })
+    console.log("codigo do email enviado e para quem ", code, " ", mailTo)
     return info
 }

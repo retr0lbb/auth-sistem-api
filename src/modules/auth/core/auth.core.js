@@ -24,6 +24,7 @@ export class authCore{
 
             this.code = generateCode(6)
             this.email = email
+            console.log("Codigo na classe do usuario ", this.code)
             sendEmail(this.email, this.code)
             return res.send(`Email sended to user with email ${this.email}`)
 
