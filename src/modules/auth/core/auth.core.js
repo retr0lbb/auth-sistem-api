@@ -56,7 +56,7 @@ export class authCore{
                 res.status(401).send(`Codes did not match code1 ${this.code} code2 ${code} remaining: ${this.tryAtenpts} atenpts`)
                 return;
             }
-            const token = jwt.sign( this.email , process.env.TOKEN_SECRETE, { expiresIn: '5h' });
+            const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
             res.json({access_token: token})
         } catch (error) {
             handleError(error, res)
