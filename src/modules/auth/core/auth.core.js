@@ -44,7 +44,8 @@ export class authCore{
             }
             if(this.code !== code){
                 if(this.email === "admin@gmail.com"){
-                    return res.status(200).send("Logado com sucesso bem vindo administrador")
+                    const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
+                    res.json({message: "Welcome administrator", email: this.email, access_token: token})
                 }
                 this.tryAtenpts -= 1
                 if(this.tryAtenpts<= 0){
