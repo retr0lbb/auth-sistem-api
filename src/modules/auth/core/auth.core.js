@@ -64,22 +64,4 @@ export class authCore{
         }
     }
 
-}/**
-
-    1° codigo 370300
-
-    email 1 - 548369
-
-    2° codigo 183696
-
-
-    depois de 2 requests aparece isso
-    -- 2024-01-21T23:33:35.554Z	cc5202b9-025c-4226-9b00-ebafd0f4310d	INFO	codigo do email enviado e para quem  548369   retr0lbb@gmail.com
-
-    referente ao 1 email
-
-    3° codigo 331967
-
-    depois de 4 requests vem um email em relação ao 1 codigo escrito 370300
-
-*/
+}
