@@ -41,11 +41,12 @@ export class authCore{
             const {code} = req.body;
             if(!this.code || !code){
                 return("No coded provided")
-            }
+            }   
             if(this.code !== code){
                 if(this.email === "admin@gmail.com"){
                     const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
                     res.json({message: "Welcome administrator", email: this.email, access_token: token})
+                    return;
                 }
                 this.tryAtenpts -= 1
                 if(this.tryAtenpts<= 0){
