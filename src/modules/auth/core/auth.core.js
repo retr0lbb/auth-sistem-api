@@ -57,7 +57,7 @@ export class authCore{
                 return;
             }
             const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
-            res.json({access_token: token})
+            res.json({email: this.email , access_token: token})
         } catch (error) {
             handleError(error, res)
         }
