@@ -1,10 +1,10 @@
 import express from "express";
 import {list} from "../controllers/contentController.js"
-import verifyToken from "../../../utils/verifyToken.js";
+import tokenMiddleweare from "../../../middlewears/verifyToken.js"
 
 const contentRouter = express.Router()
 
-contentRouter.get("/content", verifyToken, list)
+contentRouter.get("/content", tokenMiddleweare, list)
 
 
 export default contentRouter;

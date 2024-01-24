@@ -6,7 +6,7 @@ import checkSulfix from "../../../utils/checkEmailSulfix.js";
 
 configDotenv()
 
-export class UserCor{
+export class UserCor extends userSchema{
     
 
     async list(req,res){
@@ -19,9 +19,9 @@ export class UserCor{
     }
 
     async postUser(req, res){
-        const {name, email, pass} = req.body;
+        const {name, email, pass, birth} = req.body;
     try {
-        if(!name || !email || !pass){
+        if(!name || !email || !pass || !birth){
             res.send("All the informations needs to be provided");
             return;
         }
@@ -31,16 +31,17 @@ export class UserCor{
         }
 
         const user = new userSchema({
-            name: name,
+            birth: birth,
             email: email,
+            name: name,
             pass: pass
         })
         await user.save()
         res.status(200).json({Message: "Usuario Salvo com sucesso", User: user})
         
     } catch (error) {
-        handleError(error, res)
-    }
+            handleError(error, res)
+        }
     }
 
     async logUserjwt(req, res){
@@ -54,8 +55,10 @@ export class UserCor{
         if(pass !== user.pass){
             return res.status(400).send("senhas não batem")
         }
+        const userId = user._id
+        console.log(userId)
 
-        const token = jwt.sign( {email} , process.env.TOKEN_SECRETE, { expiresIn: '5h' });
+        const token = jwt.sign( {userId} , process.env.TOKEN_SECRETE);
         res.json({access_token: token})
         
 

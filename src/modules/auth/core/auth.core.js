@@ -6,9 +6,10 @@ import jwt from "jsonwebtoken";
 import {configDotenv} from "dotenv"
 configDotenv()
 
-export class authCore{
+export class AuthCore{
     email
     code;
+    id;
     tryAtenpts = 5;
 
     async LoginAndGenerateCode(req, res){
@@ -24,10 +25,9 @@ export class authCore{
             if(user.pass !== pass){
                 return res.status(400).send("senha incorreta")
             }
-
+            this.id = user._id;
             this.code = generateCode(6)
             this.email = email
-            console.log("Codigo na classe do usuario ", this.code)
             await sendEmail(this.email, this.code)
             return res.send(`Email sended to user with email ${this.email}`)
 
@@ -44,7 +44,7 @@ export class authCore{
             }   
             if(this.code !== code){
                 if(this.email === "admin@gmail.com"){
-                    const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
+                    const token = jwt.sign( {id: this.id} , process.env.TOKEN_SECRETE);
                     res.json({message: "Welcome administrator", email: this.email, access_token: token})
                     return;
                 }
@@ -58,7 +58,8 @@ export class authCore{
                 res.status(401).send(`Codes did not match code1 ${this.code} code2 ${code} remaining: ${this.tryAtenpts} atenpts`)
                 return;
             }
-            const token = jwt.sign( this.email , process.env.TOKEN_SECRETE);
+
+            const token = jwt.sign(this.id, process.env.TOKEN_SECRETE);
             res.json({email: this.email , access_token: token})
         } catch (error) {
             handleError(error, res)
